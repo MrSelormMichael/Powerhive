@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PowerHive - Products</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        :root {
+            --primary: #55d189;
+            --primary-dark: #369e62;
+            --secondary: #64748b;
+            --accent: #f59e0b;
+            --background: #f8fafc;
+            --card: #232323;
+            --text: #8e8e8e;
+            --text-light: #64748b;
+            --border: #e2e8f0;
+            --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+        }
+
+        body {
+            background-color: var(--background);
+            color: var(--text);
+            line-height: 1.5;
+        }
+
+        .navbar {
+            background-color: var(--card);
+            padding: 1rem 5%;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: var(--shadow);
+            transition: all 0.3s ease;
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .nav-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo i {
+            color: var(--accent);
+        }
+
+        .navBottom {
+            display: flex;
+            justify-content: center;
+            gap: 2.5rem;
+            margin-top: 1rem;
+        }
+
+        .menuItem {
+            color: var(--text);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.875rem;
+            padding: 0.5rem 0;
+            position: relative;
+            transition: color 0.3s ease;
+        }
+
+        .menuItem::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--primary);
+            transition: width 0.3s ease;
+        }
+
+        .menuItem:hover {
+            color: var(--primary);
+        }
+
+        .menuItem:hover::after {
+            width: 100%;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 7rem auto 2rem;
+            padding: 0 2rem;
+        }
+
+        .category-section {
+            margin-bottom: 4rem;
+        }
+
+        .category-title {
+            font-size: 1.875rem;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .category-title::before {
+            content: '';
+            width: 4px;
+            height: 24px;
+            background: var(--primary);
+            border-radius: 2px;
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+
+        .product-card {
+            background: var(--card);
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            transition: all 0.3s ease;
+            overflow: hidden;
+        }
+
+        .product-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .product-image {
+            position: relative;
+            padding-bottom: 125%;
+            overflow: hidden;
+            background: #f1f5f9;
+        }
+
+        .product-image img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .product-card:hover .product-image img {
+            transform: scale(1.1);
+        }
+
+        .product-info {
+            padding: 1.5rem;
+        }
+
+        .product-name {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            color: var(--text);
+        }
+
+        .product-rating {
+            display: flex;
+            gap: 0.25rem;
+            margin-bottom: 1rem;
+        }
+
+        .product-price {
+            font-size: 1.5rem;
+            color: var(--primary);
+            font-weight: 700;
+            margin-bottom: 1.25rem;
+        }
+
+        .contact-btn {
+            width: 100%;
+            padding: 0.75rem;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .contact-btn:hover {
+            background-color: var(--primary-dark);
+        }
+
+        .dialog-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(4px);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .dialog-content {
+            background: var(--card);
+            padding: 2.5rem;
+            border-radius: 16px;
+            max-width: 450px;
+            width: 90%;
+            position: relative;
+            animation: slideUp 0.3s ease;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .dialog-title {
+            color: var(--text);
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin-bottom: 2rem;
+        }
+
+        .contact-row {
+            background: var(--background);
+            padding: 1.25rem;
+            border-radius: 12px;
+            margin-bottom: 1rem;
+        }
+
+        .contact-detail {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+            color: var(--text);
+            font-weight: 500;
+        }
+
+        .contact-detail i {
+            color: var(--primary);
+            font-size: 1.25rem;
+        }
+
+        .contact-actions {
+            display: flex;
+            gap: 0.75rem;
+        }
+
+        .action-btn {
+            flex: 1;
+            padding: 0.75rem;
+            border: 1px solid var(--primary);
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .action-btn:not(.primary) {
+            background: transparent;
+            color: var(--primary);
+        }
+
+        .action-btn.primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+        }
+
+        .close-dialog {
+            position: absolute;
+            top: 1.25rem;
+            right: 1.25rem;
+            background: var(--background);
+            border: none;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text);
+            transition: all 0.3s ease;
+        }
+
+        .close-dialog:hover {
+            background: var(--border);
+            transform: rotate(90deg);
+        }
+
+        .alert {
+            display: none;
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            padding: 1rem 1.5rem;
+            background: var(--primary);
+            color: white;
+            border-radius: 8px;
+            font-weight: 500;
+            box-shadow: var(--shadow-lg);
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hamburger {
+                display: block;
+                background: none;
+                border: none;
+                color: var(--text);
+                font-size: 1.5rem;
+                cursor: pointer;
+            }
+
+            .navBottom {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background: var(--card);
+                flex-direction: column;
+                align-items: center;
+                padding: 1rem 0;
+                box-shadow: var(--shadow);
+            }
+
+            .navBottom.active {
+                display: flex;
+            }
+
+            .menuItem {
+                padding: 1rem 0;
+            }
+
+            .container {
+                padding: 0 1rem;
+                margin-top: 6rem;
+            }
+
+            .products-grid {
+                grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+                gap: 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .category-title {
+                font-size: 1.5rem;
+            }
+
+            .product-card {
+                border-radius: 8px;
+            }
+
+            .dialog-content {
+                padding: 1.5rem;
+            }
+
+            .contact-actions {
+                flex-direction: column;
+            }
+
+            .alert {
+                left: 1rem;
+                right: 1rem;
+                bottom: 1rem;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Rest of the HTML structure remains the same -->
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-top">
+                <a href="index.html" class="logo">
+                    <i class="fas fa-bolt"></i>
+                    PowerHive
+                </a>
+                <button class="hamburger">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+            <div class="navBottom"> 
+                <a href="Product.html" class="menuItem">PRODUCTS</a>
+                <a href="About.html" class="menuItem">ABOUT</a>
+                <a href="contact_us.html" class="menuItem">CONTACT</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container" id="productContainer">
+        <!-- Products will be dynamically inserted here -->
+    </div>
+
+    <!-- Contact Dialog -->
+    <div class="dialog-overlay" id="contactDialog">
+        <div class="dialog-content">
+            <h2 class="dialog-title">Contact Us</h2>
+            <div class="contact-info">
+                <div class="contact-row">
+                    <div class="contact-detail">
+                        <i class="fas fa-phone"></i>
+                        <span id="shopPhone">0550730457</span>
+                    </div>
+                    <div class="contact-actions">
+                        <button class="action-btn" onclick="copyPhone()">
+                            <i class="fas fa-copy"></i> Copy
+                        </button>
+                        <button class="action-btn primary" onclick="callShop()">
+                            <i class="fas fa-phone"></i> Call
+                        </button>
+                    </div>
+                </div>
+                <div class="contact-row">
+                    <div class="contact-detail">
+                        <i class="fas fa-envelope"></i>
+                        <span id="shopEmail">powerhive64@gmail.com</span>
+                    </div>
+                    <div class="contact-actions">
+                        <button class="action-btn" onclick="copyEmail()">
+                            <i class="fas fa-copy"></i> Copy
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <button class="close-dialog" onclick="closeDialog()">×</button>
+        </div>
+    </div>
+
+    <!-- Alert -->
+    <div class="alert" id="alert"></div>
+
+    <script>
+        // All JavaScript remains the same
+        // Navbar Scroll Effect
+        window.addEventListener('scroll', function() {
+            const navbar = document.querySelector('.navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // Mobile Menu Toggle
+        document.querySelector('.hamburger').addEventListener('click', function() {
+            document.querySelector('.navBottom').classList.toggle('active');
+        });
+
+        // Close mobile menu when clicking a link
+        document.querySelectorAll('.menuItem').forEach(item => {
+            item.addEventListener('click', function() {
+                document.querySelector('.navBottom').classList.remove('active');
+            });
+        });
+        const categories = [
+        {
+            id: 'lighting',
+            title: 'Lighting & Accessories',
+            products: [
+                {
+                    name: 'Lamp Holder',
+                    price: 29.99,
+                    rating: 4,
+                    image: './img unorg/lampholder.jpeg',
+                    description: 'High-brightness outdoor flood light with IP65 waterproof rating'
+                },
+                {
+                    name: 'Krist Foco Led Light 50W',
+                    price: 34.99,
+                    rating: 5,
+                    image: './img unorg/Krist foco led light 50W.jpeg',
+                    description: 'RGB LED strip with smartphone control and music sync'
+                },
+                {
+                    name: 'Krist Led Light 40W',
+                    price: 24.99,
+                    rating: 4,
+                    image: './img unorg/Krist Led Light 40W.jpeg',
+                    description: 'Solar-powered decorative garden light with auto on/off'
+                },
+                {
+                    name: 'Led Emergency Lamp',
+                    price: 24.99,
+                    rating: 4,
+                    image: './img unorg/Led emergency lamp.jpeg',
+                    description: 'Solar-powered decorative garden light with auto on/off'
+                },
+                {
+                    name: 'Led Flood light',
+                    price: 24.99,
+                    rating: 4,
+                    image: './img unorg/led flood light.jpeg',
+                    description: 'Solar-powered decorative garden light with auto on/off'
+                },
+                {
+                    name: 'Flash light',
+                    price: 24.99,
+                    rating: 4,
+                    image: './img unorg/touch light.jpeg',
+                    description: 'Solar-powered decorative garden light with auto on/off'
+                },
+                {
+                    name: 'Led Light:90% power saving',
+                    price: 24.99,
+                    rating: 4,
+                    image: './img unorg/ledlight.jpeg',
+                    description: 'Solar-powered decorative garden light with auto on/off'
+                },
+                {
+                    name: 'Chargeable Solar Flash light',
+                    price: 24.99,
+                    rating: 4,
+                    image: './img unorg/solar chargerable flash light.jpeg',
+                    description: 'Solar-powered decorative garden light with auto on/off'
+                },
+                {
+                    name: 'Aluminium Flashlight',
+                    price: 24.99,
+                    rating: 4,
+                    image: './img unorg/flashlight.jpeg',
+                    description: 'Solar-powered decorative garden light with auto on/off'
+                },
+                {
+                    name: 'Krist Led Emergency Light 90W',
+                    price: 24.99,
+                    rating: 4,
+                    image: './img unorg/krist led emergency light.jpeg',
+                    description: 'Solar-powered decorative garden light with auto on/off'
+                },
+                {
+                    name: 'Krist Led Emergency Light USB 30W',
+                    price: 24.99,
+                    rating: 4,
+                    image: './img unorg/krist led emergency light usb 30W.jpeg',
+                    description: 'Solar-powered decorative garden light with auto on/off'
+                },
+                {
+                    name: 'Krist Foco Led 10W',
+                    price: 24.99,
+                    rating: 4,
+                    image: './img unorg/krist foco led 10W.jpeg',
+                    description: 'Solar-powered decorative garden light with auto on/off'
+                }
+            ]
+        },
+        {
+            id: 'wiring',
+            title: 'Wiring & Accessories',
+            products: [
+                {
+                    name: 'Krist Foco LED Light 50W',
+                    price: 19.99,
+                    rating: 4,
+                    image: './img unorg/Krist foco led light 50W.jpeg',
+                    description: 'Energy-efficient spotlight with adjustable beam angle'
+                },
+                {
+                    name: 'Premium Cable Set',
+                    price: 45.99,
+                    rating: 5,
+                    image: './img unorg/cable-set.jpeg',
+                    description: 'High-quality copper wiring set with multiple gauges'
+                },
+                {
+                    name: 'Circuit Breaker Panel',
+                    price: 89.99,
+                    rating: 5,
+                    image: './img unorg/breaker-panel.jpeg',
+                    description: 'Professional-grade circuit breaker panel with surge protection'
+                }
+            ]
+        },
+        {
+            id: 'gadgets',
+            title: 'Gadgets',
+            products: [
+                {
+                    name: 'Krist LED Light 40W',
+                    price: 39.99,
+                    rating: 5,
+                    image: './img unorg/Krist Led Light 40W.jpeg',
+                    description: 'Versatile LED light with multiple mounting options'
+                },
+                {
+                    name: 'Smart Power Strip',
+                    price: 49.99,
+                    rating: 4,
+                    image: './img unorg/power-strip.jpeg',
+                    description: 'WiFi-enabled power strip with energy monitoring'
+                },
+                {
+                    name: 'Voltage Tester',
+                    price: 29.99,
+                    rating: 4,
+                    image: './img unorg/voltage-tester.jpeg',
+                    description: 'Non-contact voltage tester with LED indicator'
+                }
+            ]
+        },
+            {
+                id: 'tools',
+                title: 'Tools',
+                products: [
+                {
+                    name: 'Krist LED Light 40W',
+                    price: 39.99,
+                    rating: 5,
+                    image: './img unorg/Krist Led Light 40W.jpeg',
+                    description: 'Versatile LED light with multiple mounting options'
+                },
+                {
+                    name: 'Smart Power Strip',
+                    price: 49.99,
+                    rating: 4,
+                    image: './img unorg/power-strip.jpeg',
+                    description: 'WiFi-enabled power strip with energy monitoring'
+                },
+                {
+                    name: 'Voltage Tester',
+                    price: 29.99,
+                    rating: 4,
+                    image: './img unorg/voltage-tester.jpeg',
+                    description: 'Non-contact voltage tester with LED indicator'
+                }
+            ]
+        },
+            {
+                id: 'others',
+                title: 'Others',
+                products: [
+            {
+                name: 'Krist LED Light 40W',
+                price: 39.99,
+                rating: 5,
+                image: './img unorg/Krist Led Light 40W.jpeg',
+                description: 'Versatile LED light with multiple mounting options'
+            },
+            {
+                name: 'Smart Power Strip',
+                price: 49.99,
+                rating: 4,
+                image: './img unorg/power-strip.jpeg',
+                description: 'WiFi-enabled power strip with energy monitoring'
+            },
+            {
+                name: 'Voltage Tester',
+                price: 29.99,
+                rating: 4,
+                image: './img unorg/voltage-tester.jpeg',
+                description: 'Non-contact voltage tester with LED indicator'
+            }
+        ]
+    }
+];
+
+        function generateStars(rating) {
+            return Array(5).fill(0)
+                .map((_, index) => `<i class="fas fa-star${index < rating ? ' checked' : ''}" style="color: ${index < rating ? '#ffd700' : '#ddd'}"></i>`)
+                .join('');
+        }
+
+        function createProductHTML(product) {
+            return `
+                <div class="product-card">
+                    <div class="product-image">
+                        <img src="${product.image}" alt="${product.name}">
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-name">${product.name}</h3>
+                        <div class="product-rating">
+                            ${generateStars(product.rating)}
+                        </div>
+                        <div class="product-price">$${product.price.toFixed(2)}</div>
+                        <button class="contact-btn" onclick="showDialog()">Contact Us</button>
+                    </div>
+                </div>
+            `;
+        }
+
+        function initializeProducts() {
+            const container = document.getElementById('productContainer');
+            categories.forEach(category => {
+                const categoryHTML = `
+                    <div class="category-section">
+                        <h2 class="category-title">${category.title}</h2>
+                        <div class="products-grid">
+                            ${category.products.map(product => createProductHTML(product)).join('')}
+                        </div>
+                    </div>
+                `;
+                container.innerHTML += categoryHTML;
+            });
+        }
+
+        function showDialog() {
+            document.getElementById('contactDialog').style.display = 'flex';
+        }
+
+        function closeDialog() {
+            document.getElementById('contactDialog').style.display = 'none';
+        }
+
+        function showAlert(message) {
+            const alert = document.getElementById('alert');
+            alert.textContent = message;
+            alert.style.display = 'block';
+            setTimeout(() => {
+                alert.style.display = 'none';
+            }, 3000);
+        }
+
+        function copyToClipboard(text, successMessage) {
+            navigator.clipboard.writeText(text)
+                .then(() => showAlert(successMessage))
+                .catch(() => showAlert('Failed to copy. Please try again.'));
+        }
+
+        function copyPhone() {
+            const phone = document.getElementById('shopPhone').textContent;
+            copyToClipboard(phone, 'Phone number copied to clipboard!');
+        }
+
+        function copyEmail() {
+            const email = document.getElementById('shopEmail').textContent;
+            copyToClipboard(email, 'Email copied to clipboard!');
+        }
+
+        function callShop() {
+            const phone = document.getElementById('shopPhone').textContent;
+            window.location.href = `tel:${phone}`;
+        }
+
+        // Initialize the page
+        initializeProducts();
+
+        // Close dialog when clicking outside
+        document.getElementById('contactDialog').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeDialog();
+            }
+        });
+    </script>
+</body>
+</html>

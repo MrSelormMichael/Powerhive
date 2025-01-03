@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <title>PowerHive - Electrical Store</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Lato', sans-serif;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            padding: 0;
+            margin: 0;
+            overflow-x: hidden;
+        }
+
+        .buyButton {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #369e62;
+            color: white;
+            text-decoration: none;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            text-align: center;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+        
+        .buyButton:hover {
+            background-color: #2a7d4d;
+        }
+        
+
+        /* Enhanced Navbar Styles */
+        .navbar {
+            background-color: rgba(17, 17, 17, 0.95);
+            color: white;
+            padding: 1rem 5%;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        .navbar.scrolled {
+            padding: 0.5rem 5%;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .nav-container {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .nav-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 1rem;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #fff;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+        }
+
+        .logo i {
+            color: #369e62;
+            margin-right: 0.5rem;
+        }
+
+        .offer-badge {
+            background: #369e62;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: transform 0.3s ease;
+        }
+
+        .offer-badge:hover {
+            transform: scale(1.05);
+        }
+
+        .nav-bottom {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+        }
+
+        .nav-category {
+            color: #cccccc;
+            font-size: 0.9rem;
+            font-weight: 500;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            position: relative;
+            padding: 0.5rem 0;
+        }
+
+        .nav-category::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: #369e62;
+            transition: width 0.3s ease;
+        }
+
+        .nav-category:hover {
+            color: #fff;
+        }
+
+        .nav-category:hover::after {
+            width: 100%;
+        }
+
+        .hamburger {
+            display: none;
+            cursor: pointer;
+            color: white;
+            font-size: 1.5rem;
+        }
+
+        .menuItem {
+            margin-right: 50px;
+            cursor: pointer;
+            color: #cccccc;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .menuItem:hover {
+            color: #369e62;
+        }
+        .slider {
+            margin-top: 80px; /* Added to account for fixed navbar */
+            position: relative;
+            height: 100vh;
+            background: url('./img/back.jpg') no-repeat center center/cover;
+            clip-path: polygon(0 0, 100% 0, 100% 100%, 0 85%);
+            overflow: hidden;
+        }
+
+        
+        
+        
+        .sliderWrapper {
+            display: flex;
+            width: 500vw; /* 5 slides * 100vw */
+            height: 100%;
+            transition: transform 0.5s ease-in-out;
+        }
+        
+        .sliderItem {
+            width: 100vw;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+        
+
+        .sliderBg {
+            width: 750px;
+            height: 750px;
+            border-radius: 50%;
+            position: absolute;
+            opacity: 0.8;
+        }
+
+        .sliderImg {
+            z-index: 1;
+            width: 500px;
+            position: relative;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+            100% { transform: translateY(0px); }
+        }
+
+        .sliderTitle {
+            position: absolute;
+            top: 10%;
+            right: 10%;
+            font-size: 60px;
+            font-weight: 900;
+            text-align: center;
+            color: white;
+            z-index: 1;
+            text-shadow: 2px 2px 5px rgba(0,0,0,0.3);
+        }
+
+        .buyButton {
+            position: absolute;
+            top: 50%;
+            right: 10%;
+            font-size: 30px;
+            font-weight: 900;
+            color: white;
+            border: 2px solid white;
+            background-color: transparent;
+            padding: 10px 20px;
+            z-index: 1;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .buyButton:hover {
+            background-color: white;
+            color: black;
+            transform: scale(1.1);
+        }
+
+        .features {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 50px;
+            background-color: #f8f9fa;
+        }
+
+        .feature {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            padding: 20px;
+            transition: transform 0.3s ease;
+        }
+
+        .feature:hover {
+            transform: translateY(-10px);
+        }
+
+        .featureIcon {
+            width: 50px;
+            height: 50px;
+            margin-bottom: 20px;
+        }
+
+        .featureTitle {
+            font-size: 20px;
+            font-weight: 600;
+            margin: 20px;
+            color: #333;
+        }
+
+        .featureDesc {
+            color: #666;
+            width: 50%;
+            height: 100px;
+        }
+
+        .gallery {
+            padding: 50px;
+            display: flex;
+            gap: 30px;
+            background-color: #fff;
+        }
+
+        .galleryItem {
+            flex: 1;
+            padding: 50px;
+            position: relative;
+            overflow: hidden;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+        
+
+        .galleryItem:hover {
+            transform: translateY(-10px);
+        }
+
+        .galleryImg {
+            width: 100%;
+            height: 600px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+
+
+        .galleryTitle {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: rgb(236, 255, 252);
+            font-size: 30px;
+            font-weight: 900;
+            text-align: center;
+            z-index: 1;
+            text-shadow: 2px 2px 5px rgba(0,0,0,0.5);
+        }
+
+        footer {
+            background-color: #282828;
+            color: white;
+            padding: 20px 0;
+        }
+
+        .footerLeft {
+            display: flex;
+            justify-content: space-between;
+            padding: 50px;
+        }
+
+        .footerMenu {
+            margin-right: 50px;
+        }
+
+        .fMenuTitle {
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+
+        .fList {
+            padding: 0;
+            list-style: none;
+        }
+
+        .fListItem {
+            margin-bottom: 10px;
+            color: #ccc;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .fListItem:hover {
+            color: #369e62;
+        }
+
+        .fIcons {
+            display: flex;
+            gap: 20px;
+        }
+
+        .fIcon {
+            width: 35px;
+            height: 35px;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .fIcon:hover {
+            transform: scale(1.2);
+        }
+
+        @media screen and (max-width: 1024px) {
+            .nav-bottom {
+                gap: 1rem;
+            }
+
+            .nav-category {
+                font-size: 0.8rem;
+            }
+        }
+
+        @media screen and (max-width: 768px) {
+            .hamburger {
+                display: block;
+            }
+
+            .nav-bottom {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background: rgba(17, 17, 17, 0.95);
+                flex-direction: column;
+                align-items: center;
+                padding: 1rem 0;
+            }
+
+            .nav-bottom.active {
+                display: flex;
+            }
+
+            .nav-category {
+                padding: 1rem 0;
+                font-size: 1rem;
+            }
+        }
+
+        @media screen and (max-width: 480px) {
+            .navbar {
+                padding: 1rem;
+            }
+
+            .logo {
+                font-size: 1.2rem;
+            }
+
+            .offer-badge {
+                font-size: 0.8rem;
+                padding: 0.4rem 0.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-top">
+                <a href="index.html" class="logo">
+                    <i class="fas fa-bolt"></i>
+                    PowerHive
+                </a>
+                <div class="hamburger">
+                    <i class="fas fa-bars"></i>
+                </div>
+            </div>
+            <div class="nav-bottom">
+                <a href="Product.html" class="nav-category">LIGHTING AND ACCESSORIES</a>
+                <a href="Product.html" class="nav-category">WIRING AND ACCESSORIES</a>
+                <a href="Product.html" class="nav-category">GADGETS</a>
+                <a href="Product.html" class="nav-category">TOOLS</a>
+                <a href="Product.html" class="nav-category">OTHERS</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="slider">
+        <div class="sliderWrapper">
+            <div class="sliderItem">
+                <div class="sliderBg" style="background-color: #369e62;"></div>
+                <img src="./img/bulbs.png" alt="" class="sliderImg">
+                <h1 class="sliderTitle">Lightings<br>And<br>Accessories</h1>
+                <a href="Product.html" class="buyButton">EXPLORE NOW</a>
+            </div>
+            <div class="sliderItem">
+                <div class="sliderBg" style="background-color: rebeccapurple;"></div>
+                <img src="./img/Wiring_I-removebg-preview.png" alt="" class="sliderImg">
+                <h1 class="sliderTitle">Wiring<br>And<br>Accessories</h1>
+                <a href="Product.html" class="buyButton">EXPLORE NOW</a>
+            </div>
+            <div class="sliderItem">
+                <div class="sliderBg" style="background-color: teal;"></div>
+                <img src="./img/Gadgets-removebg-preview.png" alt="" class="sliderImg">
+                <h1 class="sliderTitle">Gadgets<br>and<br>More</h1>
+                <a href="Product.html" class="buyButton">EXPLORE NOW</a>
+            </div>
+            <div class="sliderItem">
+                <div class="sliderBg" style="background-color: cornflowerblue;"></div>
+                <img src="./img/Wiring-removebg-preview.png" alt="" class="sliderImg">
+                <h1 class="sliderTitle">Tools<br>And<br>More</h1>
+                <a href="Product.html" class="buyButton">EXPLORE NOW</a>
+            </div>
+            <div class="sliderItem">
+                <div class="sliderBg" style="background-color: #7c7350;"></div>
+                <img src="./img/Other-removebg-preview.png" alt="" class="sliderImg">
+                <h1 class="sliderTitle">Others</h1>
+                <a href="Product.html" class="buyButton">EXPLORE NOW</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="features">
+        <a href="Product.html" class="feature" style="text-decoration: none; color: inherit;">
+            <img src="./img/iconimg.jpg" alt="" class="featureIcon">
+            <span class="featureTitle">View our Catalogue</span>
+            <span class="featureDesc">If you need it we have it.</span>
+        </a>
+        <a href="About.html" class="feature" style="text-decoration: none; color: inherit;">
+            <img src="./img/about.png" alt="" class="featureIcon">
+            <span class="featureTitle">About Us</span>
+            <span class="featureDesc">Let us tell you about us.</span>
+        </a>
+        <a href="contact_us.html" class="feature" style="text-decoration: none; color: inherit;">
+            <img src="./img/contact.png" alt="" class="featureIcon">
+            <span class="featureTitle">CONTACT US</span>
+            <span class="featureDesc">Keep in touch via email and support system.</span>
+        </a>
+    </div>
+
+    <div class="gallery">
+        <div class="galleryItem">
+            <img src="./img/img1.jpg" alt="" class="galleryImg">
+            <h1 class="galleryTitle">Premium Quality</h1>
+        </div>
+        <div class="galleryItem">
+            <img src="./img/img2.jpg" alt="" class="galleryImg">
+            <h1 class="galleryTitle">Professional Service</h1>
+        </div>
+        <div class="galleryItem">
+            <img src="./img/img3.jpg" alt="" class="galleryImg">
+            <h1 class="galleryTitle">Expert Solutions</h1>
+        </div>
+    </div>
+
+    <footer>
+        <div class="footerLeft">
+            <div class="footerMenu">
+                <h1 class="fMenuTitle">About Us</h1>
+                <p>Email: powerhive64@gmail.com</p>
+                <p>Phone: 0550730457</p>
+                <p>Address: Makola, Kimberly Ave, Accra</p>
+                </ul>
+            </div>
+            <div class="footerMenu">
+                <h1 class="fMenuTitle">Useful Links</h1>
+                <ul class="fList">
+                    <li class="fListItem"><a href="about.html" style="text-decoration: none; color: inherit;">About</a></li>
+                    <li class="fListItem"><a href="Product.html" style="text-decoration: none; color: inherit;">Products</a></li>
+                    <li class="fListItem"><a href="about.html" style="text-decoration: none; color: inherit;">Contact Us</a></li>
+                </ul>
+            </div>
+            <div class="footerMenu">
+                <h1 class="fMenuTitle">Follow Us</h1>
+                <div class="fIcons">
+                    <a href="https://www.instagram.com/powe.rhiveshop/" target="_blank">
+                        <img src="./img/instagram.png" alt="Instagram" class="fIcon">
+                    </a>
+                    <a href="https://www.tiktok.com/@powerhive.inc" target="_blank">
+                        <img src="./img/tiktok.png" alt="TikTok" class="fIcon">
+                    </a>
+                    <a href="https://wa.me/0550730457" target="_blank">
+                        <img src="./img/whatsapp.png" alt="WhatsApp" class="fIcon">
+                    </a>
+                    
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+        // Add this at the end of the body, just before closing body tag
+        document.addEventListener('DOMContentLoaded', function() {
+            const sliderWrapper = document.querySelector(".sliderWrapper");
+            const slides = document.querySelectorAll(".sliderItem");
+            let currentSlide = 0;
+            const totalSlides = slides.length;
+        
+            function goToSlide(slideIndex) {
+                // Calculate the translation value based on the slide width (100vw)
+                sliderWrapper.style.transform = `translateX(-${slideIndex * 100}vw)`;
+                currentSlide = slideIndex;
+            }
+        
+            function nextSlide() {
+                // If we're at the last slide, go back to the first
+                if (currentSlide === totalSlides - 1) {
+                    goToSlide(0);
+                } else {
+                    goToSlide(currentSlide + 1);
+                }
+            }
+
+             // Navbar scroll effect
+        window.addEventListener('scroll', function() {
+            const navbar = document.querySelector('.navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // Mobile menu toggle
+        const hamburger = document.querySelector('.hamburger');
+        const navBottom = document.querySelector('.nav-bottom');
+        
+        hamburger.addEventListener('click', () => {
+            navBottom.classList.toggle('active');
+        });
+
+        // Close mobile menu when clicking a category
+        document.querySelectorAll('.nav-category').forEach(link => {
+            link.addEventListener('click', () => {
+                if (window.innerWidth <= 768) {
+                    navBottom.classList.remove('active');
+                }
+            });
+        });
+
+        // Close mobile menu when resizing window
+        window.addEventListener('resize', () => {
+            if (window.innerWidth > 768) {
+                navBottom.classList.remove('active');
+            }
+        });
+        
+            // Start the automatic slideshow
+            let slideInterval = setInterval(nextSlide, 4000);
+
+        
+            // Initialize first slide
+            goToSlide(0);
+        });
+        </script>
+        
